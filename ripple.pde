@@ -9,6 +9,7 @@ public void disturb(int dx, int dy) {
 }
 
 void newframe() {
+    int i, a, b;
     //Toggle maps each frame
     i=oldind;
     oldind=newind;

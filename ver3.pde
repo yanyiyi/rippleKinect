@@ -21,31 +21,26 @@ int texture[];
 
 int oldind, newind, mapind;
 
-int i, a, b; 
+int numFrames = 180;
+int currentFrame = 0;
 
+PImage[] back = new PImage[numFrames];
+PImage img;
 
-int numFrames1 = 92;
-int currentFrame1 = 0;
-int numFrames2 = 92;
-int currentFrame2 = 0;
+final int myW = 800, myH = 600, deltaX = -10, deltaY = 50;
 
-PImage[] back1 = new PImage[numFrames1];
-PImage[] back2 = new PImage[numFrames2];
-PImage img, img2, img3;
-
+void settings() {
+    size(myW + abs(deltaX)*2, myH + abs(deltaY)*2);
+}
 
 void setup() {
     new ddf.minim.Minim(this).loadFile("river.aif").loop();
-    size(640, 480);
     
-    img2 = loadImage("123.jpg");
-    frameRate(30);
-    img3=loadImage("BG3_0.png");
-    for (int i = 0; i < numFrames1; i++) {
-        back1[i] = loadImage("wave_" + i + ".png");
-        back2[i] = loadImage("BG3_" + i + ".png");
+    for (int i = 0; i < numFrames; i++) {
+        if (i % 10 < 5) back[i] = loadImage("wave_" + (i/2) + ".png");
+        else back[i] = loadImage("BG3_" + (i/2) + ".png");
+        back[i].resize(myW, myH);
     }
-    ////////////////////////
 
     context = new SimpleOpenNI(this);
     if (context.isInit() == false)
@@ -80,26 +75,8 @@ void setup() {
 
         oldind = width;
         newind = width * (height+3);
-
-        //image background
-        /* image(img, 0, 0); 
-         * loadPixels();
-         *
-         * smooth();
-         */
-
-
-        //for an image loaded at the beginning
-        /*  loadPixels();
-         *smooth();
-         *
-         *img = loadImage("123.jpeg");
-         *img.loadPixels();
-         *img.mask(img);
-         */
     }
 }
-
 
 void keyPressed() {
     if (key == 'a') {
@@ -114,15 +91,14 @@ void draw() {
 
     context.update();
     background(0);
-    int s = second();
-    int t=s%10;
 
-
-
-    //image(img3,0,0);
-    back1(t);
-
-    back2(t);
+//    int s = second();
+//    int t=s%10;
+//    back1(t);
+//    back2(t);
+    image(back[currentFrame++ % numFrames],
+            abs(deltaX) + deltaX,
+            abs(deltaY) + deltaY);
 
     img.loadPixels();
 
